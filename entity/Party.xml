@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
+        <entity entity-name="Product" package="org.example.org.product">
+            <field name="productId" type="id" is-pk="true"/>
+            <field name="productName" type="text-medium"/>
+            <field name="productTypeEnumId" type="id"/>
+            <field name="isVirtual" type="text-indicator"/>
+            <field name="isVarient" type="text-indicator"/>
+            <field name="fromDate" type="date"/>
+            <field name="thruDate" type="date"/>
+        </entity>
+
+        <entity entity-name="ProductContent" package="org.product">
+            <field name="productContentId" type="id" is-pk="true"/>
+            <field name="productId" type="id"/>
+            <field name="productContentTypeEnumId" type="id"/>
+            <field name="contentLocation" type="text-long"/>
+            <relationship type="one" related="Product" fk-name="Product"/>
+        </entity>
+
+        <entity entity-name="ProductPrice" package="org.product">
+            <field name="productPriceId" type="id" is-pk="true"/>
+            <field name="productId" type="id"/>
+            <field name="priceTypeEnumId" type="id"/>
+            <field name="price" type="currency-amount"/>
+            <relationship type="one" related="Product" fk-name="Product"/>
+        </entity>
+
+        <entity entity-name="ProductDimension" package="org.product">
+            <field name="productId" type="id" is-pk="true"/>
+            <field name="dimensionTypeEnumId" type="id"/>
+            <field name="dimensionValue" type="number-decimal"/>
+            <field name="valueUomId" type="id"/>
+            <relationship type="one" related="Product" fk-name="Product"/>
+        </entity>
+
+        <entity entity-name="ProductAssoc" package="org.product">
+            <field name="productId" type="id" is-pk="true"/>
+            <field name="toProductId" type="id"/>
+            <field name="productAssocTypeEnumId" type="id"/>
+            <field name="fromDate" type="date"/>
+            <relationship type="one" related="Product" fk-name="Product"/>
+            <relationship type="one" related="Product" fk-name="ToProduct"/>
+        </entity>
+
+</entities>
