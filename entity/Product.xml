@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
+    <entity entity-name="Product" package="oms.product">
+        <field name="productId" type="id" is-pk="true"/>
+        <field name="productName" type="text-medium"/>
+        <field name="productTypeEnumId" type="id"/>
+        <field name="isVariant" type="id"/>
+        <field name="isVirtual" type="id"/>
+        <relationship type="one" related="Enumeration">
+            <key-map field-name="productTypeEnumId"/>
+        </relationship>
+        <relationship type="many" related="ProductContent"/>
+        <relationship type="many" related="ProductPrice"/>
+        <relationship type="many" related="ProductDimension"/>
+        <relationship type="many" related="ProductAssociation"/>
+        <relationship type="many" related="ProductFeatureApplication"/>
+        <relationship type="many" related="ProductCategoryMember"/>
+        <seed-data>
+            <moqui.basic.EnumerationType description="product type tells type of product" enumTypeId="ProductType" />
+            <moqui.basic.Enumeration description="Finished goods are goods that have completed the manufacturing process but have not yet been sold or distributed to the end user. Eg-- Cars, Computers, Spare parts etc." enumId="FINISHED_GOOD" enumTypeId="ProductType" />
+            <moqui.basic.Enumeration description="Raw Material is the basic material used for manufacturing of a product/good. It is in unprocessed or minimal processed state." enumId="RAW_MATERIAL" enumTypeId="ProductType" />
+            <moqui.basic.Enumeration description="Services are the intangible products such as accounting, banking, cleaning, consultancy, education, insurance, expertise, medical treatment, or transportation. The services are rendered to us by service providers having expertise in the particular field. No transfer of possession or ownership takes place when services are sold, and they cannot be stored or transported, and they come into existence at the time they are bought and consumed." enumId="SERVICE" enumTypeId="ProductType" />
+            <moqui.basic.Enumeration description="Good -- A good is a tangible physical product which we sell to our customers that can be contrasted with a service which is intangible. As such, it is capable of being delivered to a purchaser and involves the transfer of ownership from seller to customer. For example, an apple is a tangible good, as opposed to a haircut, which is an (intangible) service." enumId="GOOD" enumTypeId="ProductType" />
+            <moqui.basic.Enumeration description="Configurable Good – When there are large number of parts which go in a product or whose combination constitute a product, then such kind of product is known as a configurable good. Ex-- Bike, Computer, Cell phone etc." enumId="MARKETING_PACKAGE" enumTypeId="ProductType" />
+            <moqui.basic.Enumeration description="Work In Process is a product which has not been completed during the manufacturing process." enumId="WORK_IN_PROGRESS" enumTypeId="ProductType" />
+            <moqui.basic.Enumeration description="Digital goods is a general term that is used to describe any goods that are stored, delivered and used in its electronic format." enumId="DIGITAL_GOOD" enumTypeId="ProductType" />
+            <moqui.basic.Enumeration description="Virtual product is a product which has no real inventory associated with it." enumId="Marketing_Package" enumTypeId="VIRTUAL_PRODUCT" />
+            <moqui.basic.Enumeration description="A product variant is a specific item that is grouped with related variants that together form a product." enumId="Marketing_Package" enumTypeId="VARIENT_PRODUCT" />
+        </seed-data>
+    </entity>
+    <entity entity-name="ProductContent" package="oms.product">
+        <field name="productContentId" type="id" is-pk="true"/>
+        <field name="productId" type="id"/>
+        <field name="productContentTypeEnumId" type="id"/>
+        <field name="contentLocation" type="id"/>
+        <relationship type="one" related="Product"/>
+        <seed-data>
+            <moqui.basic.EnumerationType description="contant is type of which format" enumTypeId="ContentType"/>
+            <moqui.basic.Enumeration description="Title" enumId="TITLE" enumTypeId="ContentType"/>
+            <moqui.basic.Enumeration description="Sub Title" enumId="SUB_TITLE" enumTypeId="ContentType"/>
+            <moqui.basic.Enumeration description="Description" enumId="DESCRIPTION" enumTypeId="ContentType"/>
+            <moqui.basic.Enumeration description="Image" enumId="IMAGE" enumTypeId="ContentType" />
+            <moqui.basic.Enumeration description="video" enumId="VIDEO" enumTypeId="ContentType" />
+        </seed-data>
+    </entity>
+    <entity entity-name="ProductPrice" package="oms.product">
+        <field name="productPriceId" type="id" is-pk="true"/>
+        <field name="productId" type="id"/>
+        <field name="productPriceTypeEnumId" type="id"/>
+        <field name="price" type="number-decimal"/>
+        <relationship type="one" related="Product"/>
+        <relationship type="one" related="Enumeration">
+            <key-map field-name="productPriceTypeEnumId"/>
+        </relationship>
+        <seed-data>
+            <moqui.basic.EnumerationType description="PriceType" enumTypeId="PriceType" />
+            <moqui.basic.Enumeration description="LIST_PRICE" enumId="LIST_PRICE" enumTypeId="PriceType" />
+            <moqui.basic.Enumeration description="PROMOTIONAL_PRICE" enumId="PROMOTIONAL_PRICE" enumTypeId="PriceType" />
+            <moqui.basic.Enumeration description="CURRENT_PRICE" enumId="CURRENT_PRICE" enumTypeId="PriceType" />
+            <moqui.basic.Enumeration description="MIN_PRICE" enumId="MIN_PRICE" enumTypeId="PriceType" />
+            <moqui.basic.Enumeration description="MAX_PRICE" enumId="MAX_PRICE" enumTypeId="PriceType" />
+        </seed-data>
+    </entity>
+    <entity entity-name="ProductDimension" package="oms.product">
+        <field name="productId" type="id" is-pk="true"/>
+        <field name="dimensionTypeEnumId" type="id" is-pk="true"/>
+        <field name="dimensionValue" type="text-medium"/>
+        <field name="valueUOMId" type="id"/>
+        <relationship type="one" related="Product"/>
+        <relationship type="one" related="Enumeration">
+            <key-map field-name="dimensionTypeEnumId"/>
+        </relationship>
+        <seed-data>
+            <moqui.basic.EnumerationType description="DimensionType" enumTypeId="DimensionType" />
+            <moqui.basic.Enumeration description="Weight" enumId="Weight" enumTypeId="DimensionType"/>
+            <moqui.basic.Enumeration description="Height" enumId="Height" enumTypeId="DimensionType"/>
+        </seed-data>
+    </entity>
+    <entity entity-name="ProductAssociation" package="oms.product">
+        <field name="productId" type="id" is-pk="true"/>
+        <field name="toProductId" type="id" is-pk="true"/>
+        <field name="fromDate" type="date-time" is-pk="true"/>
+        <field name="thruDate" type="date-time"/>
+        <field name="productAssocTypeEnumId" type="id"/>
+        <relationship type="one" related="Product">
+            <key-map field-name="productId" related="productId"/>
+        </relationship>
+        <relationship type="one" related="Product">
+            <key-map field-name="toProductId" related="productId"/>
+        </relationship>
+        <relationship type="one" related="Enumeration">
+            <key-map field-name="productAssocTypeEnumId"/>
+        </relationship>
+        <seed-data>
+            <moqui.basic.EnumerationType description="ProductAssocType" enumTypeId="ProductAssocType" />
+            <moqui.basic.Enumeration description="MarketPackage" enumId="MarketPackage" enumTypeId="ProductAssocType"/>
+            <moqui.basic.Enumeration description="Require" enumId="Require" enumTypeId="ProductAssocType"/>
+            <moqui.basic.Enumeration description="Incompatible" enumId="Incompatible" enumTypeId="ProductAssocType"/>
+            <moqui.basic.Enumeration description="Varient" enumId="Varient" enumTypeId="ProductAssocType"/>
+        </seed-data>
+    </entity>
+</entities>
